@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Switch
+        android:id="@+id/switch1"
+        style="@android:style/Widget.Material.Light.CompoundButton.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:showText="true"
+        android:splitTrack="false"
+        android:switchMinWidth="44dp"
+        android:switchPadding="10dp"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textOff="Off"
+        android:textOn="On"
+        android:textSize="14sp"
+        tools:checked="true"
+        tools:text="Power" />
+</layout>
