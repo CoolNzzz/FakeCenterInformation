@@ -15,6 +15,7 @@
         android:textOff="Off"
         android:textOn="On"
         android:textSize="14sp"
+        android:text="Power"
         tools:checked="true"
         tools:text="Power" />
 </layout>

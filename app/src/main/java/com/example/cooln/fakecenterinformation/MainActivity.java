@@ -1,12 +1,11 @@
 package com.example.cooln.fakecenterinformation;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.example.cooln.fakecenterinformation.databinding.ActivityMainBinding;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,19 +27,20 @@ public class MainActivity extends AppCompatActivity
         mActivityMainBinding = DataBindingUtil.setContentView(MainActivity.this, R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(mActivityMainBinding.appBarMain.contentSector.getId(), FragmentBasicCID.newInstance()).commit();
-
+        fragmentManager.beginTransaction()
+                .add(mActivityMainBinding.appBarMain.contentSector.contentFragment.getId(),
+                        FragmentBasicCID.newInstance(), null).commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener(view -> {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
+            intentIntegrator.setOrientationLocked(false);
+            intentIntegrator.setBeepEnabled(false);
+            intentIntegrator.setPrompt("Please set the barcode inside the square.");
+            intentIntegrator.initiateScan();
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -70,18 +71,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        // QR코드/ 바코드를 스캔한 결과
+//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+//        // result.getFormatName() : 바코드 종류
+//        // result.getContents() : 바코드 값
+//        //mTextMessage.setText(result.getContents());
+//        //mActivityMainBinding.appBarMain.contentSector.
+//        Log.d("CoolNzzz", "Format : " + result.getFormatName() + ", Contents : " + result.getContents());
+//        mActivityMainBinding.appBarMain.contentSector.status.setText("Format : " + result.getFormatName() + ", Contents : " + result.getContents());
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -102,14 +102,29 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
